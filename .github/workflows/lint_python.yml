@@ -1,5 +1,5 @@
 name: lint_python
-on: [pull_request, push]
+on: [push]  # pull_request, 
 jobs:
   lint_python:
     runs-on: ubuntu-latest
@@ -10,8 +10,9 @@ jobs:
       - run: pip install --upgrade pip setuptools wheel
       - run: pip install -r requirements_test.txt
       - run: |
-          git config user.email "$GITHUB_ACTOR@github.com"
           pushd vendor/infogami
+          git rebase --abort
+          git config user.email "$GITHUB_ACTOR@github.com"
           git pull --force --rebase origin master
           popd
       - run: pip list --outdated
