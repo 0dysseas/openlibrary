@@ -9,7 +9,11 @@ jobs:
       - run: sudo apt-get install libxml2-dev libxslt-dev
       - run: pip install --upgrade pip setuptools wheel
       - run: pip install -r requirements_test.txt
-      - run: pushd vendor/infogami && git pull --force --rebase origin master && popd
+      - run: |
+          git config user.email "$GITHUB_ACTOR@github.com"
+          pushd vendor/infogami
+          git pull --force --rebase origin master
+          popd
       - run: pip list --outdated
       - run: make lint
       - run: make i18n
