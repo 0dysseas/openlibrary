@@ -1,5 +1,5 @@
 name: npm_run_test
-on: [pull_request, push]
+on: [push]  # pull_request, 
 jobs:
   npm_run_test:
     runs-on: ubuntu-latest
@@ -8,6 +8,7 @@ jobs:
       - uses: actions/setup-node@v1
         with:
           node-version: '12'  # # Should match what's in our Dockerfile
+      - run: git clone https://github.com/internetarchive/infogami.git vendor/infogami-master
       - run: npm install
       - run: npm run lint
       - run: make js
