@@ -9,15 +9,10 @@ jobs:
       - run: sudo apt-get install libxml2-dev libxslt-dev
       - run: pip install --upgrade pip setuptools wheel
       - run: pip install -r requirements_test.txt
-      - run: |
-          pushd vendor/infogami
-          git rebase --abort || true
-          git checkout master -- docker/covers_nginx.conf docker-compose.production.yml Makefile
-          git config user.email "$GITHUB_ACTOR@github.com"
-          git pull --force --rebase origin master
-          popd
       - run: pip list --outdated
+      - run: git clone https://github.com/internetarchive/infogami.git vendor/infogami-master
+      - run: rm infogami  # Remove symlink in favour of PYTHONPATH
       - run: make lint
       - run: make i18n
-      - run: source scripts/run_doctests.sh
-      - run: make test-py
+      - run: PYTHONPATH="$PYTHONPATH:$PWD/vendor/infogami-master" make test-py
+      - run: PYTHONPATH="$PYTHONPATH:$PWD/vendor/infogami-master" source scripts/run_doctests.sh
